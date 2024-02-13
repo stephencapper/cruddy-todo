@@ -54,9 +54,7 @@ exports.create = (text, callback) => {
 
 exports.readAll = (callback) => {
   fs.readdir(exports.dataDir, (err, files) => {
-
     var readAllArray = [];
-
     if (err) {
       console.log('my bad');
       callback(err);
@@ -66,41 +64,34 @@ exports.readAll = (callback) => {
         readAllArray.push({'id' : currID, 'text' : currID});
       }
       callback(null, readAllArray);
-
-    // if (err) {
-    //   // callback for readAll should be given a truthy error if bad request is made
-    //   callback(err);
-    // } else {
-    // //  DO SOMETHING WITH response.
-    // callback(null, response);
-    // }
-
-      // for (var file of files) {
-      //   readAllObject['id'] = file
-      // Old version
-      // var data = _.map(items, (text, id) => {
-      //   return { id, text };
-      // });
-      // Updated old version
-      // var data = _.map(files, (fileName) => {
-      //   var currID = fileName.slice(0,5);
-      //   return { id : currId, text : currId };
-      // });
     }
   })
-  // Old version
-  // var data = _.map(items, (text, id) => {
-  //   return { id, text };
-  // });
 };
 
+//path = path.join(exports.dataDir, id + 'txt')
+// readFile (path, callback(err, fileData) => {
+    //if error
+      //callback(new Error(`No item with id: ${id}`))
+    //otherwise
+      //callback(null, { 'id' = id, 'text' = fileData});
+//})
+
 exports.readOne = (id, callback) => {
-  var text = items[id];
-  if (!text) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, { id, text });
-  }
+  var idPath = path.join(exports.dataDir, id + '.txt');
+  fs.readFile(idPath, (err, fileData) => {
+    if (err) {
+      callback(new Error(`No item with id: ${id}`));
+    } else {
+      callback(null, { 'id': id, 'text': String(fileData)});
+    }
+  });
+
+  // var text = items[id];
+  // if (!text) {
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   callback(null, { id, text });
+  // }
 };
 
 exports.update = (id, text, callback) => {
