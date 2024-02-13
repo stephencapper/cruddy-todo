@@ -38,19 +38,60 @@ exports.create = (text, callback) => {
   });
 };
 
-// use fs.opendir(path, callback(err, dir) => {
-//
-// for (dirEnt of dir) {
-//
+//  fs.opendir(path, callback(err, dir) => {
+//  var response = [];
+
+//  for (dirent of dir) {
+//    var currentId = dirent.name.slice(0,5)
+//    var entry = { id : currentId, text : currentId }
+//    response.push(entry)
 // }
-// })
+
+//  DO SOMETHING WITH response.
+// }
+
+// Want to create an array that has the object we're expecting to have
 
 exports.readAll = (callback) => {
-  var data = _.map(items, (text, id) => {
-    return { id, text };
-  });
-  // callback for readAll should be given a truthy error if bad request is made
-  callback(null, data);
+  fs.readdir(exports.dataDir, (err, files) => {
+
+    var readAllArray = [];
+
+    if (err) {
+      console.log('my bad');
+      callback(err);
+    } else {
+      for (var fileName of files) {
+        var currID = fileName.slice(0,5);
+        readAllArray.push({'id' : currID, 'text' : currID});
+      }
+      callback(null, readAllArray);
+
+    // if (err) {
+    //   // callback for readAll should be given a truthy error if bad request is made
+    //   callback(err);
+    // } else {
+    // //  DO SOMETHING WITH response.
+    // callback(null, response);
+    // }
+
+      // for (var file of files) {
+      //   readAllObject['id'] = file
+      // Old version
+      // var data = _.map(items, (text, id) => {
+      //   return { id, text };
+      // });
+      // Updated old version
+      // var data = _.map(files, (fileName) => {
+      //   var currID = fileName.slice(0,5);
+      //   return { id : currId, text : currId };
+      // });
+    }
+  })
+  // Old version
+  // var data = _.map(items, (text, id) => {
+  //   return { id, text };
+  // });
 };
 
 exports.readOne = (id, callback) => {
