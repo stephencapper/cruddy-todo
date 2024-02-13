@@ -17,6 +17,7 @@ const zeroPaddedNumber = (num) => {
 
 const readCounter = (callback) => {
   fs.readFile(exports.counterFile, (err, fileData) => {
+    // Example of error first callback
     if (err) {
       callback(null, 0);
     } else {
@@ -28,6 +29,7 @@ const readCounter = (callback) => {
 const writeCounter = (count, callback) => {
   var counterString = zeroPaddedNumber(count);
   fs.writeFile(exports.counterFile, counterString, (err) => {
+    // Example of error first callback
     if (err) {
       throw ('error writing counter');
     } else {
@@ -37,13 +39,26 @@ const writeCounter = (count, callback) => {
 };
 
 // Public API - Fix this function //////////////////////////////////////////////
+// Should use readCounter and writeCounter instead
+// 'counterFile' be stored with path.join
 
-exports.getNextUniqueId = () => {
-  counter = counter + 1;
-  return zeroPaddedNumber(counter);
+// Will need to create a file
+
+
+exports.getNextUniqueId = (callback) => {
+  readCounter((err, currentCount) => {
+    // console.log(currentCount, 'currentCount:');
+    if (!currentCount) {
+      currentCount = 0;
+    } else {
+      currentCount++;
+    }
+    writeCounter(currentCount, (err, updatedCounter) => {
+      // console.log(updatedCounter, 'updated Counter');
+      callback(null, updatedCounter);
+    });
+  });
 };
-
-
 
 // Configuration -- DO NOT MODIFY //////////////////////////////////////////////
 

@@ -6,6 +6,8 @@ const counter = require('./counter');
 var items = {};
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
+// Don't forget Error first Callbacks!
+// USE ONLY ASYNC FUNCTIONS
 
 exports.create = (text, callback) => {
   var id = counter.getNextUniqueId();
