@@ -48,7 +48,7 @@ const writeCounter = (count, callback) => {
 exports.getNextUniqueId = (callback) => {
   readCounter((err, currentCount) => {
     // console.log(currentCount, 'currentCount:');
-    if (!currentCount) {
+    if (!currentCount && currentCount !==0) {
       currentCount = 0;
     } else {
       currentCount++;
@@ -63,3 +63,4 @@ exports.getNextUniqueId = (callback) => {
 // Configuration -- DO NOT MODIFY //////////////////////////////////////////////
 
 exports.counterFile = path.join(__dirname, 'counter.txt');
+

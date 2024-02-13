@@ -22,35 +22,34 @@ var items = {};
 // writeFile('./data/${value}', text, (err)=> {})
 
 
+
 exports.create = (text, callback) => {
+  // increments counter
   counter.getNextUniqueId((err, value) => {
-    fs.writeFile(`./data/${value}.txt`, text, (err)=> {
+    // writes new file with new ID
+    fs.writeFile(path.join(exports.dataDir, value + '.txt'), text, (err)=> {
       if(err) {
-        //create to act as expected error needs to be truthy if bad request made
-        console.log('whoops!');
         callback(err);
       } else {
-// uncertain about what to pass in after null and maybe this stays because that's what the client wants!
-        // {id: value, text: text}
+        // returns an object that the client likes
         callback(null, {'id': value, 'text': text});
-        // callback(null, { id, text }); this was the original
       }
-
     })
-
-
-    // items[id] = text;
-
-
-
   });
-
 };
+
+// use fs.opendir(path, callback(err, dir) => {
+//
+// for (dirEnt of dir) {
+//
+// }
+// })
 
 exports.readAll = (callback) => {
   var data = _.map(items, (text, id) => {
     return { id, text };
   });
+  // callback for readAll should be given a truthy error if bad request is made
   callback(null, data);
 };
 
