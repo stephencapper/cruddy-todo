@@ -68,14 +68,6 @@ exports.readAll = (callback) => {
   })
 };
 
-//path = path.join(exports.dataDir, id + 'txt')
-// readFile (path, callback(err, fileData) => {
-    //if error
-      //callback(new Error(`No item with id: ${id}`))
-    //otherwise
-      //callback(null, { 'id' = id, 'text' = fileData});
-//})
-
 exports.readOne = (id, callback) => {
   var idPath = path.join(exports.dataDir, id + '.txt');
   fs.readFile(idPath, (err, fileData) => {
@@ -85,23 +77,23 @@ exports.readOne = (id, callback) => {
       callback(null, { 'id': id, 'text': String(fileData)});
     }
   });
-
-  // var text = items[id];
-  // if (!text) {
-  //   callback(new Error(`No item with id: ${id}`));
-  // } else {
-  //   callback(null, { id, text });
-  // }
 };
 
 exports.update = (id, text, callback) => {
-  var item = items[id];
-  if (!item) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    items[id] = text;
-    callback(null, { id, text });
-  }
+  var idPath = path.join(exports.dataDir, id + '.txt');
+  exports.readOne(id, (err) => {
+    if (err) {
+      callback(new Error(`No item with id: ${id}`));
+    } else {
+      fs.writeFile(idPath, text, (err) => {
+        if (err) {
+          callback(new Error(`No item with id: ${id}`));
+        } else {
+        callback(null, { id, text });
+        }
+      });
+    }
+  });
 };
 
 exports.delete = (id, callback) => {
